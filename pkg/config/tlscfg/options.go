@@ -11,17 +11,17 @@ import (
 
 // Options describes the configuration properties for TLS Connections.
 type Options struct {
-	Enabled        bool          `mapstructure:"enabled"`
-	CAPath         string        `mapstructure:"ca"`
-	CertPath       string        `mapstructure:"cert"`
-	KeyPath        string        `mapstructure:"key"`
-	ServerName     string        `mapstructure:"server_name"` // only for client-side TLS config
-	ClientCAPath   string        `mapstructure:"client_ca"`   // only for server-side TLS config for client auth
-	CipherSuites   []string      `mapstructure:"cipher_suites"`
-	MinVersion     string        `mapstructure:"min_version"`
-	MaxVersion     string        `mapstructure:"max_version"`
-	SkipHostVerify bool          `mapstructure:"skip_host_verify"`
-	ReloadInterval time.Duration `mapstructure:"reload_interval"`
+	Enabled        bool         
+	CAPath         string        
+	CertPath       string        
+	KeyPath        string        
+	ServerName     string        // only for client-side TLS config
+	ClientCAPath   string        // only for server-side TLS config for client auth
+	CipherSuites   []string      
+	MinVersion     string       
+	MaxVersion     string        
+	SkipHostVerify bool        
+	ReloadInterval time.Duration 
 }
 
 func (o *Options) ToOtelClientConfig() configtls.ClientConfig {

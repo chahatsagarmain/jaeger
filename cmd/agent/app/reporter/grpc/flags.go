@@ -44,10 +44,9 @@ func (b *ConnBuilder) InitFromViper(v *viper.Viper) (*ConnBuilder, error) {
 	if err != nil {
 		return b, fmt.Errorf("failed to process TLS options: %w", err)
 	}
-	if tls.Enabled {
-		tlsConf := tls.ToOtelClientConfig()
-		b.TLS = &tlsConf
-	}
+
+	b.TLS = &tls
+
 	b.DiscoveryMinPeers = v.GetInt(discoveryMinPeers)
 	return b, nil
 }

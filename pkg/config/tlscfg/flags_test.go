@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.opentelemetry.io/collector/config/configtls"
 
 	"github.com/jaegertracing/jaeger/pkg/config"
 )
@@ -173,21 +174,32 @@ func TestFailedTLSFlags(t *testing.T) {
 		t.Run(metaTest.side, func(t *testing.T) {
 			for _, test := range metaTest.tests {
 				t.Run(test, func(t *testing.T) {
-					type UnderTest interface {
+					type UnderTestClient interface {
 						AddFlags(flags *flag.FlagSet)
-						InitFromViper(v *viper.Viper) (Options, error)
+						InitFromViper(v *viper.Viper) (configtls.ClientConfig, error)
 					}
-					var underTest UnderTest
+					type UnderTestServer interface {
+						AddFlags(flags *flag.FlagSet)
+						InitFromViper(v *viper.Viper) (*configtls.ServerConfig, error)
+					}
+					var underTestClient UnderTestClient
+					var underTestServer UnderTestServer
 					if metaTest.side == "client" {
-						underTest = &ClientFlagsConfig{
+						underTestClient = &ClientFlagsConfig{
 							Prefix: "prefix",
 						}
 					} else {
-						underTest = &ServerFlagsConfig{
+						underTestServer = &ServerFlagsConfig{
 							Prefix: "prefix",
 						}
 					}
-					v, command := config.Viperize(underTest.AddFlags)
+					var v *viper.Viper
+					var command *cobra.Command
+					if metaTest.side == "client" {
+						v, command = config.Viperize(underTestClient.AddFlags)
+					} else {
+						v, command = config.Viperize(underTestServer.AddFlags)
+					}
 
 					cmdLine := []string{
 						"--prefix.tls.enabled=true",
@@ -195,13 +207,21 @@ func TestFailedTLSFlags(t *testing.T) {
 					}
 					err := command.ParseFlags(cmdLine)
 					require.NoError(t, err)
-					_, err = underTest.InitFromViper(v)
+					if metaTest.side == "client" {
+						_, err = underTestClient.InitFromViper(v)
+					} else {
+						_, err = underTestServer.InitFromViper(v)
+					}
 					require.NoError(t, err)
 
 					cmdLine[0] = "--prefix.tls.enabled=false"
 					err = command.ParseFlags(cmdLine)
 					require.NoError(t, err)
-					_, err = underTest.InitFromViper(v)
+					if metaTest.side == "client" {
+						_, err = underTestClient.InitFromViper(v)
+					} else {
+						_, err = underTestServer.InitFromViper(v)
+					}
 					require.Error(t, err)
 					require.EqualError(t, err, "prefix.tls.* options cannot be used when prefix.tls.enabled is false")
 				})

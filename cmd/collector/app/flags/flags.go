@@ -197,7 +197,7 @@ func initHTTPFromViper(v *viper.Viper, opts *confighttp.ServerConfig, cfg server
 	if err != nil {
 		return fmt.Errorf("failed to parse HTTP TLS options: %w", err)
 	}
-	opts.TLSSetting = tlsOpts.ToOtelServerConfig()
+	opts.TLSSetting = tlsOpts
 	opts.Endpoint = ports.FormatHostPort(v.GetString(cfg.prefix + "." + flagSuffixHostPort))
 	opts.IdleTimeout = v.GetDuration(cfg.prefix + "." + flagSuffixHTTPIdleTimeout)
 	opts.ReadTimeout = v.GetDuration(cfg.prefix + "." + flagSuffixHTTPReadTimeout)
@@ -212,7 +212,7 @@ func initGRPCFromViper(v *viper.Viper, opts *configgrpc.ServerConfig, cfg server
 	if err != nil {
 		return fmt.Errorf("failed to parse GRPC TLS options: %w", err)
 	}
-	opts.TLSSetting = tlsOpts.ToOtelServerConfig()
+	opts.TLSSetting = tlsOpts
 	opts.NetAddr.Endpoint = ports.FormatHostPort(v.GetString(cfg.prefix + "." + flagSuffixHostPort))
 	opts.MaxRecvMsgSizeMiB = v.GetInt(cfg.prefix+"."+flagSuffixGRPCMaxReceiveMessageLength) / (1024 * 1024)
 	opts.Keepalive = &configgrpc.KeepaliveServerConfig{

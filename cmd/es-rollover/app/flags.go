@@ -73,5 +73,5 @@ func (c *Config) InitFromViper(v *viper.Viper) {
 	if err != nil {
 		panic(err)
 	}
-	c.TLSConfig = opts.ToOtelClientConfig()
+	c.TLSConfig = opts
 }

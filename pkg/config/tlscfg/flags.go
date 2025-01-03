@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/spf13/viper"
+	"go.opentelemetry.io/collector/config/configtls"
 )
 
 const (
@@ -63,7 +64,7 @@ func (c ServerFlagsConfig) AddFlags(flags *flag.FlagSet) {
 }
 
 // InitFromViper creates tls.Config populated with values retrieved from Viper.
-func (c ClientFlagsConfig) InitFromViper(v *viper.Viper) (Options, error) {
+func (c ClientFlagsConfig) InitFromViper(v *viper.Viper) (configtls.ClientConfig, error) {
 	var p Options
 	p.Enabled = v.GetBool(c.Prefix + tlsEnabled)
 	p.CAPath = v.GetString(c.Prefix + tlsCA)
@@ -75,15 +76,15 @@ func (c ClientFlagsConfig) InitFromViper(v *viper.Viper) (Options, error) {
 	if !p.Enabled {
 		var empty Options
 		if !reflect.DeepEqual(&p, &empty) {
-			return p, fmt.Errorf("%s.tls.* options cannot be used when %s is false", c.Prefix, c.Prefix+tlsEnabled)
+			return configtls.ClientConfig{}, fmt.Errorf("%s.tls.* options cannot be used when %s is false", c.Prefix, c.Prefix+tlsEnabled)
 		}
 	}
 
-	return p, nil
+	return p.ToOtelClientConfig(), nil
 }
 
 // InitFromViper creates tls.Config populated with values retrieved from Viper.
-func (c ServerFlagsConfig) InitFromViper(v *viper.Viper) (Options, error) {
+func (c ServerFlagsConfig) InitFromViper(v *viper.Viper) (*configtls.ServerConfig, error) {
 	var p Options
 	p.Enabled = v.GetBool(c.Prefix + tlsEnabled)
 	p.CertPath = v.GetString(c.Prefix + tlsCert)
@@ -99,11 +100,11 @@ func (c ServerFlagsConfig) InitFromViper(v *viper.Viper) (Options, error) {
 	if !p.Enabled {
 		var empty Options
 		if !reflect.DeepEqual(&p, &empty) {
-			return p, fmt.Errorf("%s.tls.* options cannot be used when %s is false", c.Prefix, c.Prefix+tlsEnabled)
+			return nil, fmt.Errorf("%s.tls.* options cannot be used when %s is false", c.Prefix, c.Prefix+tlsEnabled)
 		}
 	}
 
-	return p, nil
+	return p.ToOtelServerConfig(), nil
 }
 
 // stripWhiteSpace removes all whitespace characters from a string

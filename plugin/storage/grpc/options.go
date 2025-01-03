@@ -41,7 +41,7 @@ func initFromViper(cfg *Config, v *viper.Viper) error {
 	if err != nil {
 		return fmt.Errorf("failed to parse gRPC storage TLS options: %w", err)
 	}
-	cfg.ClientConfig.TLSSetting = remoteTLS.ToOtelClientConfig()
+	cfg.ClientConfig.TLSSetting = remoteTLS
 	cfg.TimeoutConfig.Timeout = v.GetDuration(remoteConnectionTimeout)
 	cfg.Tenancy = tenancy.InitFromViper(v)
 	return nil

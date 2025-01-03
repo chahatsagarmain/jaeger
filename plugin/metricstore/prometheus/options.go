@@ -119,7 +119,7 @@ func (opt *Options) InitFromViper(v *viper.Viper) error {
 	if err != nil {
 		return fmt.Errorf("failed to process Prometheus TLS options: %w", err)
 	}
-	opt.TLS = tlsOpts.ToOtelClientConfig()
+	opt.TLS = tlsOpts
 	return nil
 }
 
