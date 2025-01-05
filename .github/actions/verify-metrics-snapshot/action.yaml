@@ -30,13 +30,21 @@ runs:
         echo "v2_tag=$v2_tag" >> $GITHUB_ENV
         echo "$v2_tag"
 
+    - name: Check existing cache
+      id: check-cache
+      uses: actions/cache/restore@1bd1e32a3bdc45362d1e726936510720a7c30a57
+      with:
+        path: ./.metrics/${{ inputs.snapshot }}
+        key: ${{ env.v2_tag }}_${{ inputs.artifact_key }}
+        lookup-only: true
+
     - name: Cache scraped metrics for tagged release for longer retention
       id: tagged-metrics
-      if: "contains(github.event.head_commit.message, 'Release')"
+      if: contains(github.ref, 'main') == 'true' && steps.check-cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@1bd1e32a3bdc45362d1e726936510720a7c30a57
       with:
         path: ./.metrics/${{ inputs.snapshot }}
-        key: ${{ github.ref_name }}_${{ inputs.artifact_key }}
+        key: ${{ env.v2_tag }}_${{ inputs.artifact_key }}
       
     - name: Download the cached tagged metrics
       id: cache-metrics
