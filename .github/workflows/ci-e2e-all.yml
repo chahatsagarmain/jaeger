@@ -2,7 +2,9 @@ name: E2E Tests
 
 on:
   push:
-    branches: [main , e2e_metrics_tagged]
+    branches: [main ,e2e_metrics_tagged]
+    tags:
+      - 'v*'
 
   # pull_request:
   #   branches: [main]
