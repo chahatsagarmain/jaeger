@@ -2,10 +2,12 @@ name: E2E Tests
 
 on:
   push:
-    branches: [main]
+    branches: [main,e2e_run]
+    tags:
+      - 'v*'
 
-  pull_request:
-    branches: [main]
+  # pull_request:
+  #   branches: [main]
 
 concurrency:
   group: combined-cit-${{ github.workflow }}-${{ (github.event.pull_request && github.event.pull_request.number) || github.ref || github.run_id }}
@@ -35,8 +37,4 @@ jobs:
 
   opensearch:
     uses: ./.github/workflows/ci-e2e-opensearch.yml
-
-
-
-
 
