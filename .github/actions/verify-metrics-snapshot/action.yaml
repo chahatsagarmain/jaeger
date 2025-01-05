@@ -37,6 +37,7 @@ runs:
         v2_tag=$(make echo-v2)
         echo "v2_tag=$v2_tag" >> $GITHUB_ENV
         echo "$v2_tag"
+        echo "GitHub ref name: ${{ github.ref_name }}"
       
     - name: Download the cached tagged metrics
       id: cache-metrics
