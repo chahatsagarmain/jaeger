@@ -60,7 +60,7 @@ def main():
     file2_lines = read_metric_file(args.file2)
     
     # Generate diff
-    diff_lines = generate_diff(file1_lines, file2_lines, str(args.file1), str(args.file2))
+    diff_lines = generate_diff(file1_lines, file2_lines)
     
     # Check if there are any differences
     if not diff_lines:
