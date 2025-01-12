@@ -47,6 +47,7 @@ runs:
         key: ${{ env.v2_tag }}_${{ inputs.artifact_key }}
     
     - name: Delete cache
+      shell: bash
       run: gh cache delete ${{ env.v2_tag }}_${{ inputs.artifact_key }}
       
     - name: Download the cached tagged metrics
