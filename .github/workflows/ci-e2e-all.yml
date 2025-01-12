@@ -15,7 +15,7 @@ concurrency:
 
 permissions:
   contents: write
-  repository-projects: write
+  checks: write
 
 jobs:
   badger:
