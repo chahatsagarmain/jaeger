@@ -49,7 +49,7 @@ runs:
       env:
         GH_TOKEN: ${{ github.token }}
       shell: bash
-      run: gh cache delete ${{ env.v2_tag }}_${{ inputs.artifact_key }} --repo chahatsagarmain/jaeger
+      run: gh cache delete --all --repo chahatsagarmain/jaeger
       
     - name: Download the cached tagged metrics
       id: cache-metrics
