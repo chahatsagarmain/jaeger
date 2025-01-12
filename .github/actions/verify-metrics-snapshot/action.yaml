@@ -48,7 +48,7 @@ runs:
     
     - name: Delete cache
       env:
-        GH_TOKEN: ${{ env.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ github.token }}
       shell: bash
       run: gh cache delete ${{ env.v2_tag }}_${{ inputs.artifact_key }}
       
