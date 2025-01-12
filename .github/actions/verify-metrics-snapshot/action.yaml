@@ -47,7 +47,7 @@ runs:
     
     - name: Delete cache
       env:
-        GH_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ secret.CLEAR_CACHE }}
       shell: bash
       run: gh cache delete --all --repo chahatsagarmain/jaeger
       
