@@ -45,6 +45,9 @@ runs:
       with:
         path: ./.metrics/${{ inputs.snapshot }}
         key: ${{ env.v2_tag }}_${{ inputs.artifact_key }}
+    
+    - name: Delete cache
+      run: gh cache delete ${{ env.v2_tag }}_${{ inputs.artifact_key }}
       
     - name: Download the cached tagged metrics
       id: cache-metrics
