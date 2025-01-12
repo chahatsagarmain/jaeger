@@ -46,7 +46,7 @@ runs:
         key: ${{ env.v2_tag }}_${{ inputs.artifact_key }}
     
     - name: Delete cache
-      env:
+      secrets:
         GH_TOKEN: ${{ secrets.CLEAR_CACHE }}
       shell: bash
       run: gh cache delete --all --repo chahatsagarmain/jaeger
