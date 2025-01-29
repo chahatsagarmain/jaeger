@@ -8,16 +8,17 @@ import (
 	"encoding/gob"
 	"io"
 	"unsafe"
+	modelv1 "github.com/jaegertracing/jaeger-idl/model/v1"
 )
 
-type SamplerType int
+type SamplerType = modelv1.SamplerType
 
 const (
-	SamplerTypeUnrecognized SamplerType = iota
-	SamplerTypeProbabilistic
-	SamplerTypeLowerBound
-	SamplerTypeRateLimiting
-	SamplerTypeConst
+	SamplerTypeUnrecognized  SamplerType = modelv1.SamplerTypeUnrecognized
+	SamplerTypeProbabilistic             = modelv1.SamplerTypeProbabilistic
+	SamplerTypeLowerBound                = modelv1.SamplerTypeLowerBound
+	SamplerTypeRateLimiting              = modelv1.SamplerTypeRateLimiting
+	SamplerTypeConst                     = modelv1.SamplerTypeConst
 )
 
 var toSamplerType = map[string]SamplerType{
@@ -162,3 +163,4 @@ func (s *Span) ReplaceParentID(newParentID SpanID) {
 func uint64ToInt64Bits(value uint64) int64 {
 	return *(*int64)(unsafe.Pointer(&value))
 }
+var SpanKindTag = modelv1.SpanKindTag
